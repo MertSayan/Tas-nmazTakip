@@ -4,6 +4,7 @@ import axios from 'axios';
 import qs from 'qs'; // query string'i düzgün oluşturmak için
 import './Properties.css';
 import RentalHistoryModal from '../components/RentalHistoryModal';
+import AddPropertyModal from '../components/AddPropertyModal';
 
 
 
@@ -11,6 +12,7 @@ function Properties() {
   const [selectedPropertyId, setSelectedPropertyId] = useState(null);
   const [data, setData] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   // Filtre değerlerini URL'den oku
   const [filters, setFilters] = useState({
@@ -58,7 +60,7 @@ function Properties() {
   return (
     <div style={{ padding: '30px' }}>
       <h2>Taşınmazlar</h2>
-
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
       {/* Filtre Alanları */}
       <div className="filters">
   <input type="text" placeholder="İsim" value={filters.name} onChange={(e) => setFilters({ ...filters, name: e.target.value })} />
@@ -76,8 +78,20 @@ function Properties() {
   </select>
   <button onClick={handleFilter} className="filter-btn">Filtrele</button>
 </div>
-
-
+  <button 
+  type="button"  // ← Bu satırı ekle!
+  onClick={() => setIsAddModalOpen(true)} 
+  style={{
+    padding: '8px 16px',
+    backgroundColor: '#007bff',
+    color: 'white',
+    border: 'none',
+    borderRadius: '6px',
+    cursor: 'pointer'
+  }}>
+  + Taşınmaz Ekle
+</button>
+</div>
       <br />
 
       {/* Tablo */}
@@ -131,11 +145,17 @@ function Properties() {
         </tbody>
       </table>
         {selectedPropertyId && (
-  <RentalHistoryModal
-    propertyId={selectedPropertyId}
-    onClose={() => setSelectedPropertyId(null)}
-  />
-  )}
+        <RentalHistoryModal
+          propertyId={selectedPropertyId}
+          onClose={() => setSelectedPropertyId(null)}
+        />
+        )}
+        {isAddModalOpen && (
+        <AddPropertyModal
+          onClose={() => setIsAddModalOpen(false)}
+          onSuccess={fetchData} // başarılı ekleme sonrası tabloyu güncellemek için
+        />
+        )}
     </div>
   );
 }
