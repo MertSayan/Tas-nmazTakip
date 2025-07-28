@@ -5,6 +5,7 @@ import qs from 'qs'; // query string'i düzgün oluşturmak için
 import './Properties.css';
 import RentalHistoryModal from '../components/RentalHistoryModal';
 import AddPropertyModal from '../components/AddPropertyModal';
+import UpdatePropertyModal from '../components/UpdatePropertyModal'; // yolun doğru olduğundan emin ol
 
 
 
@@ -13,6 +14,8 @@ function Properties() {
   const [data, setData] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedUpdatePropertyId, setSelectedUpdatePropertyId] = useState(null);
 
   // Filtre değerlerini URL'den oku
   const [filters, setFilters] = useState({
@@ -135,9 +138,17 @@ function Properties() {
                   color="info"
                   size="small"
                   style={{ textTransform: 'none' }}
-                  onClick={() => setSelectedPropertyId(property.propertyId)}
-                >
+                  onClick={() => setSelectedPropertyId(property.propertyId)}>
                   Kiralama Geçmişi
+                </button>
+
+                 <button
+                  className="update-btn"
+                  onClick={() => {
+                    setSelectedUpdatePropertyId(property.propertyId);
+                    setIsUpdateModalOpen(true);
+                  }}>
+                  Güncelle
                 </button>
             </td>
             </tr>
@@ -155,6 +166,19 @@ function Properties() {
           onClose={() => setIsAddModalOpen(false)}
           onSuccess={fetchData} // başarılı ekleme sonrası tabloyu güncellemek için
         />
+        )}
+
+        {isUpdateModalOpen && selectedUpdatePropertyId && (
+          <UpdatePropertyModal
+            propertyId={selectedUpdatePropertyId}
+            onClose={() => {
+              setIsUpdateModalOpen(false);
+              setSelectedUpdatePropertyId(null);
+            }}
+            onUpdated={() => {
+              fetchData(); // tabloyu yeniden getir
+            }}
+          />
         )}
     </div>
   );

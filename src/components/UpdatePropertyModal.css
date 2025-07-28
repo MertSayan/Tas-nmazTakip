@@ -1,0 +1,100 @@
+/* UpdatePropertyModal.css */
+
+.update-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.update-modal-content {
+  background-color: #fff;
+  padding: 30px 40px;
+  border-radius: 10px;
+  width: 500px;
+  max-width: 95%;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.update-modal-content h3 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  text-align: center;
+}
+
+.update-modal-content label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.update-modal-content input,
+.update-modal-content textarea,
+.update-modal-content select {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.update-modal-content input:focus,
+.update-modal-content textarea:focus,
+.update-modal-content select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.update-modal-content .modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.update-modal-content button {
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.update-modal-content .cancel-btn {
+  background-color: #ccc;
+  color: #000;
+}
+
+.update-modal-content .save-btn {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.update-modal-content .save-btn:hover {
+  background-color: #218838;
+}
+
+.update-modal-content .cancel-btn:hover {
+  background-color: #999;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
