@@ -1,14 +1,29 @@
 import React, { useState } from 'react';
 import './Login.css';
+import { login } from '../services/authService';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+
 
 function Login() {
+  const { setToken } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const result = await login(email, password);
+    setToken(result.token); // Token'ı sakla
+    alert("Giriş başarılı!");
+    setToken(result.token); // otomatik yönlendirme tetiklenir
+    navigate('/dashboard');
+  } catch (err) {
+    console.error(err);
+    alert("Giriş başarısız. Bilgileri kontrol edin.");
+  }
+};
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Giriş bilgileri:", email, password);
-  };
 
   return (
     <div className="login-container">
@@ -43,8 +58,7 @@ function Login() {
         </div>
 
         <p className="signup">Or Sign Up Using</p>
-        <a href="#">SIGN UP</a>
-      </form>
+        <span style={{ color: 'blue', cursor: 'pointer' }}>SIGN UP</span>      </form>
     </div>
   );
 }
