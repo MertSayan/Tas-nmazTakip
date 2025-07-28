@@ -22,8 +22,21 @@ button.filter-btn {
   cursor: pointer;
 }
 
+
 button.filter-btn:hover {
   background-color: #45a049;
+}
+
+button.history-btn {
+  background-color: #0bc1bd;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+button.history-btn:hover {
+  background-color: #00bfff;
 }
 
 table {

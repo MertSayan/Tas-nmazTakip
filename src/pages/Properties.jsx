@@ -3,9 +3,12 @@ import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs'; // query string'i düzgün oluşturmak için
 import './Properties.css';
+import RentalHistoryModal from '../components/RentalHistoryModal';
+
 
 
 function Properties() {
+  const [selectedPropertyId, setSelectedPropertyId] = useState(null);
   const [data, setData] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -107,17 +110,33 @@ function Properties() {
               </td>
               <td>{property.region}</td>
               <td>{property.sizeSqm}</td>
-              <td>{property.description}</td>
+              <td>{property.description?.substring(0, 10)}...</td>
               <td>{new Date(property.createdAt).toLocaleDateString()}</td>
               <td>{property.createdByUserName}</td>
               <td>{property.updatedAt ? new Date(property.updatedAt).toLocaleDateString() : '-'}</td>
               <td>{property.updatedByUserName || '-'}</td>
+              <td>
+                <button className="history-btn"
+                  variant="contained"
+                  color="info"
+                  size="small"
+                  style={{ textTransform: 'none' }}
+                  onClick={() => setSelectedPropertyId(property.propertyId)}
+                >
+                  Kiralama Geçmişi
+                </button>
+            </td>
             </tr>
           ))}
         </tbody>
       </table>
+        {selectedPropertyId && (
+  <RentalHistoryModal
+    propertyId={selectedPropertyId}
+    onClose={() => setSelectedPropertyId(null)}
+  />
+  )}
     </div>
   );
 }
-
 export default Properties;
