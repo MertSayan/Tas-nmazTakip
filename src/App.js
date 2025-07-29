@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Properties from './pages/Properties'; // en üstte
 import Dashboard from './pages/Dashboard';
+import Rentals from './pages/Rentals';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 function AppRoutes() {
@@ -24,6 +25,10 @@ function AppRoutes() {
       <Route
         path="/properties"
         element={<Properties />}
+      />
+      <Route
+        path="/rentals"
+        element={<Rentals />}
       />
     </Routes>
   );
