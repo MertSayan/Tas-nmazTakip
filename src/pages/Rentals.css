@@ -18,7 +18,7 @@
 }
 
 .filters button {
-  background-color: #007bff;
+  background-color: #4587cd;
   color: white;
   padding: 8px 16px;
   border: none;
@@ -42,15 +42,17 @@
   align-items: center;
   padding: 16px;
   font-size: 14px;
-  gap: 12px;
+  gap: 16px 100px;
 }
 
 .installments-section {
   padding: 16px;
   max-height: 200px;
   overflow-y: auto;
-  animation: fadeIn 0.4s ease-in-out;
+  animation: slideFadeIn 0.3s ease-out forwards;
 }
+
+
 
 .installments-table {
   width: 100%;
@@ -104,7 +106,34 @@
 .icon.teal { color: #1abc9c; }
 .icon.yellow { color: #f1c40f; }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.btn-primary {
+  background-color: #cc8902;
+  color: white;
+}
+
+.btn-outline-secondary {
+  background-color: white;
+  border: 1px solid #ced4da;
+  color: #333;
+}
+
+@keyframes slideFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

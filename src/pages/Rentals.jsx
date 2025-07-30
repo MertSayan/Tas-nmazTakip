@@ -1,14 +1,22 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import './Rentals.css';
+import PaymentNoteModal from '../components/PaymentNoteModal'; // eklemeyi unutma
+import { useNavigate } from "react-router-dom";
+
 import {
   FaIdCard, FaPhone, FaCalendarAlt,
   FaUser, FaMapMarkerAlt, FaWarehouse, FaCheckCircle
 } from 'react-icons/fa';
 import { FaCircleStop } from 'react-icons/fa6';
 
+
+
+
+
 function Rentals() {
   const [rentals, setRentals] = useState([]);
+  const navigate = useNavigate();
   const [expandedId, setExpandedId] = useState(null);
   const [filters, setFilters] = useState({
     propertyType: '',
@@ -17,6 +25,9 @@ function Rentals() {
     startDate: '',
     endDate: ''
   });
+  const [selectedInstallmentId, setSelectedInstallmentId] = useState(null);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+
 
   const fetchRentals = useCallback(async () => {
     try {
@@ -61,6 +72,9 @@ function Rentals() {
         <input type="date" value={filters.startDate} onChange={(e) => setFilters({ ...filters, startDate: e.target.value })} />
         <input type="date" value={filters.endDate} onChange={(e) => setFilters({ ...filters, endDate: e.target.value })} />
         <button onClick={fetchRentals}>Filtrele</button>
+        <button className="btn-primary" onClick={() => navigate('/properties')}>
+        Taşınmazlar
+        </button>
       </div>
 
       {rentals.map((rental) => (
@@ -100,12 +114,34 @@ function Rentals() {
                 <tbody>
                   {rental.installments.map((inst, i) => (
                     <tr key={i}>
+                      
                       <td>{new Date(inst.dueDate).toLocaleDateString()}</td>
                       <td>{inst.amount} ₺</td>
                       <td style={{ color: inst.notes?.toLowerCase().includes("iptal") ? 'red' : 'black' }}>
                         {inst.notes?.toLowerCase().includes("iptal") ? 'İPTAL' : (inst.isPaid ? 'Ödendi' : 'Bekliyor')}
                       </td>
                       <td className="notes-cell">{inst.notes}</td>
+                      <td>
+                        <button
+                          disabled={inst.isPaid}
+                          onClick={() => {
+                            setSelectedInstallmentId(inst.paymentInstallmentId);
+                            setIsPaymentModalOpen(true);
+                          }}
+                          style={{
+                            padding: '4px 8px',
+                            fontSize: '12px',
+                            backgroundColor: inst.isPaid ? '#ccc' : '#28a745',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: inst.isPaid ? 'not-allowed' : 'pointer'
+                          }}
+                        >
+                          Ödeme İşlemi
+                        </button>
+
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -114,7 +150,23 @@ function Rentals() {
           )}
         </div>
       ))}
+      {isPaymentModalOpen && selectedInstallmentId && (
+        <PaymentNoteModal 
+          installmentId={selectedInstallmentId}
+          onClose={() => {
+            setIsPaymentModalOpen(false);
+            setSelectedInstallmentId(null);
+          }}
+          onSuccess={() => {
+            // Ödeme başarıyla kaydedildiğinde yeniden veri çek veya sayfayı yenile
+            fetchRentals(); 
+            setIsPaymentModalOpen(false);
+            setSelectedInstallmentId(null);
+          }}
+        />
+      )}
     </div>
+    
   );
 }
 

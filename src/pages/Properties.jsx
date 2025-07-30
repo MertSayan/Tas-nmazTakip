@@ -6,6 +6,7 @@ import './Properties.css';
 import RentalHistoryModal from '../components/RentalHistoryModal';
 import AddPropertyModal from '../components/AddPropertyModal';
 import UpdatePropertyModal from '../components/UpdatePropertyModal'; // yolun doğru olduğundan emin ol
+import RentPropertyModal from '../components/RentPropertyModal';
 
 
 
@@ -17,6 +18,13 @@ function Properties() {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedUpdatePropertyId, setSelectedUpdatePropertyId] = useState(null);
 
+  const [isRentModalOpen, setIsRentModalOpen] = useState(false);
+  const [selectedRentPropertyId, setSelectedRentPropertyId] = useState(null);
+
+  const handleOpenRentModal = (propertyId) => {
+  setSelectedRentPropertyId(propertyId);
+  setIsRentModalOpen(true);
+};
   // Filtre değerlerini URL'den oku
   const [filters, setFilters] = useState({
     type: searchParams.get("type") || '',
@@ -150,6 +158,13 @@ function Properties() {
                   }}>
                   Güncelle
                 </button>
+                <button
+                  className="rent-btn"
+                  disabled={property.status !== "Available"}
+                  onClick={() => handleOpenRentModal(property.propertyId)}
+                >
+                  Kirala
+                </button>
             </td>
             </tr>
           ))}
@@ -178,6 +193,17 @@ function Properties() {
             onUpdated={() => {
               fetchData(); // tabloyu yeniden getir
             }}
+          />
+        )}
+
+        {isRentModalOpen && selectedRentPropertyId && (
+          <RentPropertyModal
+            propertyId={selectedRentPropertyId}
+            onClose={() => {
+              setIsRentModalOpen(false);
+              setSelectedRentPropertyId(null);
+            }}
+            onSuccess={fetchData}
           />
         )}
     </div>

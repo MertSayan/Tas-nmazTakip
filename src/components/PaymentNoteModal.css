@@ -1,0 +1,60 @@
+/* PaymentNoteModal.css */
+.payment-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  width: 300px;
+  animation: fadeIn 0.3s ease;
+}
+
+.payment-modal h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #343a40;
+  text-align: center;
+}
+
+.payment-modal textarea {
+  width: 100%;
+  height: 80px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: none;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-buttons button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.modal-buttons button:first-child {
+  background-color: #dc3545;
+  color: white;
+}
+
+.modal-buttons button:last-child {
+  background-color: #007bff;
+  color: white;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -45%); }
+  to   { opacity: 1; transform: translate(-50%, -50%); }
+}
