@@ -55,3 +55,31 @@
   background-color: #dc3545;
   color: white;
 }
+
+/* slide-down animasyonu */
+.slide-down {
+  animation: slideDownFade 0.3s ease-out;
+}
+
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ada-parsel-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.ada-parsel-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}

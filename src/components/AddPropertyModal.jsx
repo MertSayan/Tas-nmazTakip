@@ -10,7 +10,9 @@ const AddPropertyModal = ({ onClose, onSuccess }) => {
     type: '',
     region: '',
     sizeSqm: '',
-    description: ''
+    description: '',
+    blockNumber:'',
+    parcelNumber:''
   });
 
   const handleChange = (e) => {
@@ -59,15 +61,43 @@ const AddPropertyModal = ({ onClose, onSuccess }) => {
           <label>Tür:</label>
           <select name="type" value={formData.type} onChange={handleChange} required>
             <option value="">Tür Seçin</option>
-            <option value="0">Garden</option>
-            <option value="1">Shop</option>
+            <option value="0">Bahçe/Arazi/Arsa</option>
+            <option value="1">Dükkan</option>
           </select>
+
+          {formData.type === "0" && (
+            <div className="ada-parsel-row">
+              <div className="ada-parsel-item">
+                <label>Ada:</label>
+                <input
+                  type="text"
+                  name="blockNumber"
+                  value={formData.blockNumber}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="ada-parsel-item">
+                <label>Parsel:</label>
+                <input
+                  type="text"
+                  name="parcelNumber"
+                  value={formData.parcelNumber}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+          )}
+
 
           <label>Bölge:</label>
           <input type="text" name="region" value={formData.region} onChange={handleChange} required />
 
           <label>m²:</label>
           <input type="number" name="sizeSqm" value={formData.sizeSqm} onChange={handleChange} required />
+
+         
 
           <label>Açıklama:</label>
           <textarea name="description" value={formData.description} onChange={handleChange} />

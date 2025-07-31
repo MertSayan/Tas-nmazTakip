@@ -31,7 +31,9 @@ function Properties() {
     region: searchParams.get("region") || '',
     sizeSqm: searchParams.get("sizeSqm") || '',
     status: searchParams.get("status") || '',
-    name: searchParams.get("name") || ''
+    name: searchParams.get("name") || '',
+    blockNumber:searchParams.get("blockNumber") || '',
+    parcelNumber:searchParams.get("parcelNumber") || '',
   });
 
   // API isteği
@@ -42,7 +44,9 @@ function Properties() {
       Region: filters.region || undefined,
       SizeSqm: filters.sizeSqm || undefined,
       PropertyStatus: filters.status || undefined,
-      Name: filters.name || undefined
+      Name: filters.name || undefined,
+      BlockNumber:filters.blockNumber || undefined,
+      ParcelNumber:filters.parcelNumber || undefined
     });
 
     const response = await axios.get(`https://localhost:7104/api/Properties/FiltreliListele?${query}`);
@@ -64,7 +68,9 @@ function Properties() {
       region: filters.region,
       sizeSqm: filters.sizeSqm,
       status: filters.status,
-      name: filters.name
+      name: filters.name,
+      blockNumber:filters.blockNumber,
+      parcelNumber:filters.parcelNumber
     });
   };
 
@@ -75,6 +81,8 @@ function Properties() {
       {/* Filtre Alanları */}
       <div className="filters">
   <input type="text" placeholder="İsim" value={filters.name} onChange={(e) => setFilters({ ...filters, name: e.target.value })} />
+  <input type="text" placeholder="Ada" value={filters.blockNumber} onChange={(e) => setFilters({ ...filters, blockNumber: e.target.value })} />
+  <input type="text" placeholder="Parsel" value={filters.parcelNumber} onChange={(e) => setFilters({ ...filters, parcelNumber: e.target.value })} />
   <input type="text" placeholder="Bölge" value={filters.region} onChange={(e) => setFilters({ ...filters, region: e.target.value })} />
   <input type="number" placeholder="m²" value={filters.sizeSqm} onChange={(e) => setFilters({ ...filters, sizeSqm: e.target.value })} />
   <select value={filters.type} onChange={(e) => setFilters({ ...filters, type: e.target.value })}>
@@ -111,6 +119,7 @@ function Properties() {
           <tr>
             <th>ID</th>
             <th>İsim</th>
+            <th>Ada/Parsel</th>
             <th>Tür</th>
             <th>Durum</th>
             <th>Bölge</th>
@@ -127,6 +136,7 @@ function Properties() {
             <tr key={property.propertyId}>
               <td>{property.propertyId}</td>
               <td>{property.name}</td>
+              <td>{property.blockNumber} / {property.parcelNumber}</td>
               <td>{property.type}</td>
               <td>
                 <span className={`status-${property.status}`}>

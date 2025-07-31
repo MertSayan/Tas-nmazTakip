@@ -6,6 +6,8 @@ import './UpdatePropertyModal.css';
 function UpdatePropertyModal({ propertyId, onClose, onUpdated }) {
   const [formData, setFormData] = useState({
     name: '',
+    blockNumber:'',
+    parcelNumber:'',
     type: 0,
     region: '',
     sizeSqm: 0,
@@ -20,6 +22,8 @@ function UpdatePropertyModal({ propertyId, onClose, onUpdated }) {
         const data = response.data;
         setFormData({
           name: data.name,
+          blockNumber:data.blockNumber,
+          parcelNumber:data.parcelNumber,
           type: data.type === 'Shop' ? 1 : 0,
           region: data.region,
           sizeSqm: data.sizeSqm,
@@ -69,6 +73,28 @@ function UpdatePropertyModal({ propertyId, onClose, onUpdated }) {
             <option value={0}>Bahçe</option>
             <option value={1}>Dükkan</option>
           </select>
+          
+          {formData.type === 0 && (
+          <div className="slide-down">
+            <label>Ada:</label>
+            <input
+              type="text"
+              placeholder="Ada No"
+              value={formData.blockNumber}
+              onChange={e => setFormData({ ...formData, blockNumber: e.target.value })}
+              required
+            />
+
+            <label>Parsel:</label>
+            <input
+              type="text"
+              placeholder="Parsel"
+              value={formData.parcelNumber}
+              onChange={e => setFormData({ ...formData, parcelNumber: e.target.value })}
+              required
+            />
+          </div>
+        )}
           <label>Bölge:</label>
           <input type="text" placeholder="Bölge" value={formData.region} onChange={e => setFormData({ ...formData, region: e.target.value })} required />
           <label>Metre kare:</label>
