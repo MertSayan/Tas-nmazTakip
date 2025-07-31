@@ -8,7 +8,7 @@ import {
   FaIdCard, FaPhone, FaCalendarAlt,
   FaUser, FaMapMarkerAlt, FaWarehouse, FaCheckCircle
 } from 'react-icons/fa';
-import { FaCircleStop } from 'react-icons/fa6';
+import { Fa0, FaApple, FaCircleStop } from 'react-icons/fa6';
 
 
 
@@ -24,6 +24,7 @@ function Rentals() {
     citizenNationalId: '',
     startDate: '',
     endDate: ''
+    
   });
   const [selectedInstallmentId, setSelectedInstallmentId] = useState(null);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
@@ -75,6 +76,10 @@ function Rentals() {
         <button className="btn-primary" onClick={() => navigate('/properties')}>
         Taşınmazlar
         </button>
+        <button className="btn-primary" onClick={() => navigate('/statistics')}>
+        İstatistikler
+        </button>
+        
       </div>
 
       {rentals.map((rental) => (
@@ -84,6 +89,7 @@ function Rentals() {
             <div><FaMapMarkerAlt className="icon green" /> {rental.region}</div>
             <div><FaIdCard className="icon blue" /> {rental.citizenNationalId}</div>
             <div><FaPhone className="icon orange" /> {rental.citizenPhoneNumber}</div>
+            <div><FaUser className="icon pink" /> {rental.citizenFullName}</div>
             <div><FaCalendarAlt className="icon red" /> {new Date(rental.startDate).toLocaleDateString()} - {new Date(rental.endDate).toLocaleDateString()}</div>
             <div><FaUser className="icon teal" /> {rental.createdEmployee}</div>
             <div>
@@ -93,8 +99,7 @@ function Rentals() {
                 <><FaCircleStop className="icon red" /> Pasif</>
               )}
             </div>
-
-
+            
             <button className="toggle-btn" onClick={() => handleToggle(rental.rentalId)}>
               {expandedId === rental.rentalId ? "▲" : "▼"}
             </button>

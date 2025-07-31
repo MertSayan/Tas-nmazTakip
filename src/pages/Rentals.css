@@ -1,5 +1,5 @@
 .rentals-container {
-  padding: 30px;
+  padding:7px;
   font-family: 'Segoe UI', sans-serif;
 }
 
@@ -43,6 +43,7 @@
   padding: 16px;
   font-size: 14px;
   gap: 16px 100px;
+  
 }
 
 .installments-section {

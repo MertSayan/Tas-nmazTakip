@@ -7,6 +7,7 @@ import RentalHistoryModal from '../components/RentalHistoryModal';
 import AddPropertyModal from '../components/AddPropertyModal';
 import UpdatePropertyModal from '../components/UpdatePropertyModal'; // yolun doğru olduğundan emin ol
 import RentPropertyModal from '../components/RentPropertyModal';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -25,6 +26,8 @@ function Properties() {
   setSelectedRentPropertyId(propertyId);
   setIsRentModalOpen(true);
 };
+const navigate = useNavigate();
+
   // Filtre değerlerini URL'den oku
   const [filters, setFilters] = useState({
     type: searchParams.get("type") || '',
@@ -75,41 +78,59 @@ function Properties() {
   };
 
   return (
-    <div style={{ padding: '30px' }}>
+    <div style={{ padding: '20px' }}>
       <h2>Taşınmazlar</h2>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
       {/* Filtre Alanları */}
       <div className="filters">
-  <input type="text" placeholder="İsim" value={filters.name} onChange={(e) => setFilters({ ...filters, name: e.target.value })} />
-  <input type="text" placeholder="Ada" value={filters.blockNumber} onChange={(e) => setFilters({ ...filters, blockNumber: e.target.value })} />
-  <input type="text" placeholder="Parsel" value={filters.parcelNumber} onChange={(e) => setFilters({ ...filters, parcelNumber: e.target.value })} />
-  <input type="text" placeholder="Bölge" value={filters.region} onChange={(e) => setFilters({ ...filters, region: e.target.value })} />
-  <input type="number" placeholder="m²" value={filters.sizeSqm} onChange={(e) => setFilters({ ...filters, sizeSqm: e.target.value })} />
-  <select value={filters.type} onChange={(e) => setFilters({ ...filters, type: e.target.value })}>
-    <option value="">Tür Seçin</option>
-    <option value="Garden">Bahçe</option>
-    <option value="Shop">Dükkan</option>
-  </select>
-  <select value={filters.status} onChange={(e) => setFilters({ ...filters, status: e.target.value })}>
-    <option value="">Durum Seçin</option>
-    <option value="Available">Müsait</option>
-    <option value="Rented">Kirada</option>
-  </select>
-  <button onClick={handleFilter} className="filter-btn">Filtrele</button>
-</div>
-  <button 
-  type="button"  // ← Bu satırı ekle!
-  onClick={() => setIsAddModalOpen(true)} 
-  style={{
-    padding: '8px 16px',
-    backgroundColor: '#007bff',
-    color: 'white',
-    border: 'none',
-    borderRadius: '6px',
-    cursor: 'pointer'
-  }}>
-  + Taşınmaz Ekle
-</button>
+        <input type="text" placeholder="İsim" value={filters.name} onChange={(e) => setFilters({ ...filters, name: e.target.value })} />
+        <input type="text" placeholder="Ada" value={filters.blockNumber} onChange={(e) => setFilters({ ...filters, blockNumber: e.target.value })} />
+        <input type="text" placeholder="Parsel" value={filters.parcelNumber} onChange={(e) => setFilters({ ...filters, parcelNumber: e.target.value })} />
+        <input type="text" placeholder="Bölge" value={filters.region} onChange={(e) => setFilters({ ...filters, region: e.target.value })} />
+        <input type="number" placeholder="m²" value={filters.sizeSqm} onChange={(e) => setFilters({ ...filters, sizeSqm: e.target.value })} />
+        <select value={filters.type} onChange={(e) => setFilters({ ...filters, type: e.target.value })}>
+          <option value="">Tür Seçin</option>
+          <option value="Garden">Bahçe</option>
+          <option value="Shop">Dükkan</option>
+        </select>
+        <select value={filters.status} onChange={(e) => setFilters({ ...filters, status: e.target.value })}>
+          <option value="">Durum Seçin</option>
+          <option value="Available">Müsait</option>
+          <option value="Rented">Kirada</option>
+        </select>
+        <button onClick={handleFilter} className="filter-btn">Filtrele</button>
+      </div>
+
+      <button 
+        type="button"  // ← Bu satırı ekle!
+        onClick={() => setIsAddModalOpen(true)} 
+        style={{
+          padding: '8px 16px',
+          backgroundColor: '#007bff',
+          color: 'white',
+          border: 'none',
+          borderRadius: '6px',
+          cursor: 'pointer'
+        }}>
+        + Taşınmaz Ekle
+      </button>
+
+      <button
+        type="button"
+        onClick={() => navigate("/rentals")}
+        style={{
+          padding: '8px 16px',
+          backgroundColor: '#890f92ff',
+          color: 'white',
+          border: 'none',
+          borderRadius: '6px',
+          cursor: 'pointer',
+          marginLeft: '10px'
+        }}
+      >
+        Kiralamalar
+      </button>
+
 </div>
       <br />
 
