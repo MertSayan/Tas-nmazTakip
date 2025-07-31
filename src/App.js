@@ -4,6 +4,7 @@ import Properties from './pages/Properties'; // en üstte
 import Dashboard from './pages/Dashboard';
 import Rentals from './pages/Rentals';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import StatisticsPanel from './pages/StatisticsPanel';
 
 function AppRoutes() {
   const { token } = useAuth();
@@ -29,6 +30,10 @@ function AppRoutes() {
       <Route
         path="/rentals"
         element={<Rentals />}
+      />
+            <Route
+        path="/statistics"
+        element={<StatisticsPanel />}
       />
     </Routes>
   );

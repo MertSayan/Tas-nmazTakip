@@ -116,7 +116,19 @@ function Rentals() {
                     <tr key={i}>
                       
                       <td>{new Date(inst.dueDate).toLocaleDateString()}</td>
-                      <td>{inst.amount} ₺</td>
+                      <td>
+                        {inst.amount.toLocaleString()} ₺
+                        {inst.totalPenalty && parseFloat(inst.totalPenalty.replace(",", ".")) > 0 && (
+                          <span style={{
+                            color: inst.isPaid ? "green" : "red",
+                            fontWeight: "bold",
+                            marginLeft: "6px",
+                            fontSize: "13px"
+                          }}>
+                            +{parseFloat(inst.totalPenalty.replace(",", ".")).toLocaleString('tr-TR')} ₺ gecikme
+                          </span>
+                        )}
+                      </td>
                       <td style={{ color: inst.notes?.toLowerCase().includes("iptal") ? 'red' : 'black' }}>
                         {inst.notes?.toLowerCase().includes("iptal") ? 'İPTAL' : (inst.isPaid ? 'Ödendi' : 'Bekliyor')}
                       </td>

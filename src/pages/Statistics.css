@@ -1,0 +1,129 @@
+.kpi-dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  margin-top: 30px;
+}
+
+.kpi-box {
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+  text-align: center;
+}
+
+.kpi-box:hover {
+  transform: translateY(-4px);
+}
+
+.kpi-icon {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 28px;
+  opacity: 0.2;
+}
+
+.kpi-number {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.kpi-label {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Flat renk temaları */
+.box-blue { background-color: #3498db; }
+.box-cyan { background-color: #1abc9c; }
+.box-green { background-color: #2ecc71; }
+.box-red { background-color: #e74c3c; }
+
+
+.kpi-sub {
+  font-size: 12px;
+  margin-top: 4px;
+  opacity: 0.85;
+}
+
+/* Yeni kutu renkleri */
+.box-dark   { background-color: #2c3e50; }
+.box-orange { background-color: #e67e22; }
+.box-yellow { background-color: #f1c40f; color: #333; }
+.box-pink   { background-color: #e84393; }
+
+
+.charts-section {
+  margin-top: 50px;
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.list-section {
+  margin-top: 50px;
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.simple-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 12px;
+}
+
+.simple-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 15px;
+}
+
+.simple-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.simple-table th,
+.simple-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.simple-table th {
+  background-color: #f4f4f4;
+  font-weight: 600;
+}
+
+.box-teal { background-color: #1abc9c; }
+.box-purple { background-color: #9b59b6; }
+.box-gold { background-color: #f39c12; }
+.box-gray { background-color: #7f8c8d; }
+.box-indigo { background-color: #3f51b5; }
+
+.chart-row {
+  display: flex;
+  gap: 24px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+.chart-box {
+  flex: 1;
+  min-width: 300px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}

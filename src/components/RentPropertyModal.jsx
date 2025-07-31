@@ -8,6 +8,7 @@ const RentPropertyModal = ({ propertyId, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
     citizenNationalId: '',
     citizenPhoneNumber: '',
+    citizenFullName:'',
     startDate: '',
     endDate: '',
     paymentFrequency: '',
@@ -30,6 +31,7 @@ const RentPropertyModal = ({ propertyId, onClose, onSuccess }) => {
       propertyId: propertyId,
       citizenNationalId: formData.citizenNationalId,
       citizenPhoneNumber: formData.citizenPhoneNumber,
+      citizenFullName:formData.citizenFullName,
       startDate: formData.startDate,
       endDate: formData.endDate,
       paymentFrequency: parseInt(formData.paymentFrequency),
@@ -61,6 +63,7 @@ const RentPropertyModal = ({ propertyId, onClose, onSuccess }) => {
         <form onSubmit={handleSubmit}>
           <input name="citizenNationalId" placeholder="Vatandaş TC" onChange={handleChange} required />
           <input name="citizenPhoneNumber" placeholder="Telefon" onChange={handleChange} required />
+          <input name="citizenFullName" placeholder="Vatandaş İsim Soyisim" onChange={handleChange} required />
           <input type="datetime-local" name="startDate" onChange={handleChange} required />
           <input type="datetime-local" name="endDate" onChange={handleChange} required />
           <select name="paymentFrequency" onChange={handleChange} required>
