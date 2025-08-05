@@ -4,6 +4,8 @@ import './Rentals.css';
 import PaymentNoteModal from '../components/PaymentNoteModal'; // eklemeyi unutma
 import { useNavigate } from "react-router-dom";
 import ReportPopup from '../components/ReportPopup';
+import ApplyIncreaseModal from '../components/ApplyIncreaseModal';
+import { jwtDecode } from "jwt-decode";
 
 import {
   FaIdCard, FaPhone, FaCalendarAlt,
@@ -13,13 +15,24 @@ import { Fa0, FaApple, FaCircleStop } from 'react-icons/fa6';
 
 
 
+function getCurrentUserId() {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+  const decoded = jwtDecode(token);
+  // AddPropertyModal.jsx’de yaptığın claim:
+  const id = decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+  return Number(id);
+}
 
 
 function Rentals() {
+  const [isIncreaseModalOpen, setIsIncreaseModalOpen] = useState(false);
+  const [increaseRentalId, setIncreaseRentalId] = useState(null);
+
   const [pdfUrl, setPdfUrl] = useState("");
-const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [reportRentalId, setReportRentalId] = useState(null);
-   const [rentals, setRentals] = useState([]);
+  const [rentals, setRentals] = useState([]);
   const navigate = useNavigate();
   const [expandedId, setExpandedId] = useState(null);
   const [filters, setFilters] = useState({
@@ -27,7 +40,8 @@ const [showPopup, setShowPopup] = useState(false);
     region: '',
     citizenNationalId: '',
     startDate: '',
-    endDate: ''
+    endDate: '',
+    isActive: ''
     
   });
   const [selectedInstallmentId, setSelectedInstallmentId] = useState(null);
@@ -42,6 +56,7 @@ const [showPopup, setShowPopup] = useState(false);
       if (filters.citizenNationalId) params.append('CitizenNationalId', filters.citizenNationalId);
       if (filters.startDate) params.append('StartDate', filters.startDate);
       if (filters.endDate) params.append('EndDate', filters.endDate);
+      if (filters.isActive) params.append('IsActive',filters.isActive);
 
       const response = await axios.get(`https://localhost:7104/api/Rentals/KiralamalariGör?${params.toString()}`);
       setRentals(response.data);
@@ -49,6 +64,27 @@ const [showPopup, setShowPopup] = useState(false);
       console.error("Veri alınamadı", error);
     }
   }, [filters]);
+
+  async function cancelRental(rentalId) {
+  const token = localStorage.getItem("token");
+  const cancelByUserId = getCurrentUserId();
+  if (!token || !cancelByUserId) {
+    console.error("Token veya kullanıcı bilgisi bulunamadı.");
+    return;
+  }
+
+  try {
+    await axios.put(
+      "https://localhost:7104/api/Rentals/Kiralamaİptali",
+      { rentalId, cancelByUserId },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    await fetchRentals(); // işlem sonrası listeyi yeniler
+  } catch (err) {
+    console.error("Kiralama iptali başarısız:", err);
+  }
+}
+
 
   useEffect(() => {
     fetchRentals();
@@ -76,6 +112,16 @@ const [showPopup, setShowPopup] = useState(false);
         <input type="text" placeholder="T.C." value={filters.citizenNationalId} onChange={(e) => setFilters({ ...filters, citizenNationalId: e.target.value })} />
         <input type="date" value={filters.startDate} onChange={(e) => setFilters({ ...filters, startDate: e.target.value })} />
         <input type="date" value={filters.endDate} onChange={(e) => setFilters({ ...filters, endDate: e.target.value })} />
+        <label>
+          Sadece aktifler
+          <input
+            type="checkbox"
+            checked={filters.isActive === true}
+            onChange={(e) =>
+              setFilters({ ...filters, isActive: e.target.checked ? true : null })
+            }
+          />
+        </label>
         <button onClick={fetchRentals}>Filtrele</button>
         <button className="btn-primary" onClick={() => navigate('/properties')}>
         Taşınmazlar
@@ -92,25 +138,41 @@ const [showPopup, setShowPopup] = useState(false);
             <div><FaWarehouse className="icon purple" /> <strong>{rental.propertyName}</strong> - {translateType(rental.propertyType)}</div>
             <div><FaMapMarkerAlt className="icon green" /> {rental.region}</div>
             <div><FaIdCard className="icon blue" /> {rental.citizenNationalId}</div>
-            <div><FaPhone className="icon orange" /> {rental.citizenPhoneNumber}</div>
-            <div><FaUser className="icon pink" /> {rental.citizenFullName}</div>
+            {/* <div><FaPhone className="icon orange" /> {rental.citizenPhoneNumber}</div> */}
+            {/* <div><FaUser className="icon pink" /> {rental.citizenFullName}</div> */}
             <div><FaCalendarAlt className="icon red" /> {new Date(rental.startDate).toLocaleDateString()} - {new Date(rental.endDate).toLocaleDateString()}</div>
-            <div><FaUser className="icon teal" /> {rental.createdEmployee}</div>
+            {/* <div><FaUser className="icon teal" /> {rental.createdEmployee}</div> */}
             <button
-  className="btn btn-outline-secondary"
-  onClick={() => {
-    // wwwroot’tan sonrasını ayıkla
-    const relativePath = rental.reportPath.split("wwwroot")[1]?.replace(/\\/g, "/");
+              className="btn btn-outline-secondary"
+              onClick={() => {
+                // wwwroot’tan sonrasını ayıkla
+                const relativePath = rental.reportPath.split("wwwroot")[1]?.replace(/\\/g, "/");
 
-    // Tarayıcının erişebileceği full URL oluştur
-    const url = `https://localhost:7104${relativePath}`;
+                // Tarayıcının erişebileceği full URL oluştur
+                const url = `https://localhost:7104${relativePath}`;
 
-    setPdfUrl(url);       // iframe'e verilecek olan kaynak bu
-    setShowPopup(true);   // popup aç
-  }}
->
-  📄 Rapor Al
-</button>
+                setPdfUrl(url);       // iframe'e verilecek olan kaynak bu
+                setShowPopup(true);   // popup aç
+              }}
+            >
+              📄 Rapor Al
+            </button>
+            <button
+              className="btn btn-outline-secondary"
+              onClick={() => {
+                setIncreaseRentalId(rental.rentalId);
+                setIsIncreaseModalOpen(true);
+              }}
+            >
+              💹 Zam Uygula
+            </button>
+            <button
+              className="btn btn-outline-secondary"
+              onClick={() => cancelRental(rental.rentalId)}
+              title="Bu kiralamayı iptal et"
+            >
+              Kiralamayı İptal Et
+            </button>
             <div>
               {rental.isActive ? (
                 <><FaCheckCircle className="icon yellow" /> Aktif</>
@@ -119,6 +181,8 @@ const [showPopup, setShowPopup] = useState(false);
               )}
             </div>
             
+            
+
             <button className="toggle-btn" onClick={() => handleToggle(rental.rentalId)}>
               {expandedId === rental.rentalId ? "▲" : "▼"}
             </button>
@@ -207,6 +271,24 @@ const [showPopup, setShowPopup] = useState(false);
       {showPopup && (
         <ReportPopup pdfUrl={pdfUrl} onClose={() => setShowPopup(false)} />
       )}
+
+      {isIncreaseModalOpen && increaseRentalId && (
+        <ApplyIncreaseModal
+          rentalId={increaseRentalId}
+          onClose={() => {
+            setIsIncreaseModalOpen(false);
+            setIncreaseRentalId(null);
+          }}
+          onSuccess={() => {
+            // başarı sonrası listeyi yenile
+            fetchRentals();
+            setIsIncreaseModalOpen(false);
+            setIncreaseRentalId(null);
+          }}
+        />
+      )}
+
+
     </div>
     
   );
