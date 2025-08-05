@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import ReportPopup from '../components/ReportPopup';
 import ApplyIncreaseModal from '../components/ApplyIncreaseModal';
 import { jwtDecode } from "jwt-decode";
+import ExtendRentalModal from '../components/ExtendRentalModal';
 
 import {
   FaIdCard, FaPhone, FaCalendarAlt,
@@ -26,6 +27,9 @@ function getCurrentUserId() {
 
 
 function Rentals() {
+  const [isExtendModalOpen, setIsExtendModalOpen] = useState(false);
+  const [extendRentalId, setExtendRentalId] = useState(null);
+
   const [isIncreaseModalOpen, setIsIncreaseModalOpen] = useState(false);
   const [increaseRentalId, setIncreaseRentalId] = useState(null);
 
@@ -196,6 +200,20 @@ function Rentals() {
                 <div><FaUser className="icon teal" /> Kiralamayı Olusturan Personel: {rental.createdEmployee}</div>
               </div>
 
+              <div style={{ marginBottom: 12 }}>
+                <button
+                  className="btn btn-outline-secondary"
+                  disabled={!rental.isActive}               // pasif kiralamada kapalı
+                  title={rental.isActive ? 'Süreyi uzat' : 'Kiralama pasif'}
+                  onClick={() => {
+                    setExtendRentalId(rental.rentalId);
+                    setIsExtendModalOpen(true);
+                  }}
+                >
+                  ⏱ Kiralama Süresini Uzat
+                </button>
+              </div>
+
               <table className="installments-table">
                 <thead>
                   <tr>
@@ -301,6 +319,20 @@ function Rentals() {
         />
       )}
 
+      {isExtendModalOpen && extendRentalId && (
+        <ExtendRentalModal
+          rentalId={extendRentalId}
+          onClose={() => {
+            setIsExtendModalOpen(false);
+            setExtendRentalId(null);
+          }}
+          onSuccess={() => {
+            fetchRentals();
+            setIsExtendModalOpen(false);
+            setExtendRentalId(null);
+          }}
+        />
+      )}
 
     </div>
     
