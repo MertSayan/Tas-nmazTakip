@@ -3,6 +3,7 @@ import axios from 'axios';
 import './Rentals.css';
 import PaymentNoteModal from '../components/PaymentNoteModal'; // eklemeyi unutma
 import { useNavigate } from "react-router-dom";
+import ReportPopup from '../components/ReportPopup';
 
 import {
   FaIdCard, FaPhone, FaCalendarAlt,
@@ -15,7 +16,10 @@ import { Fa0, FaApple, FaCircleStop } from 'react-icons/fa6';
 
 
 function Rentals() {
-  const [rentals, setRentals] = useState([]);
+  const [pdfUrl, setPdfUrl] = useState("");
+const [showPopup, setShowPopup] = useState(false);
+  const [reportRentalId, setReportRentalId] = useState(null);
+   const [rentals, setRentals] = useState([]);
   const navigate = useNavigate();
   const [expandedId, setExpandedId] = useState(null);
   const [filters, setFilters] = useState({
@@ -92,6 +96,21 @@ function Rentals() {
             <div><FaUser className="icon pink" /> {rental.citizenFullName}</div>
             <div><FaCalendarAlt className="icon red" /> {new Date(rental.startDate).toLocaleDateString()} - {new Date(rental.endDate).toLocaleDateString()}</div>
             <div><FaUser className="icon teal" /> {rental.createdEmployee}</div>
+            <button
+  className="btn btn-outline-secondary"
+  onClick={() => {
+    // wwwroot’tan sonrasını ayıkla
+    const relativePath = rental.reportPath.split("wwwroot")[1]?.replace(/\\/g, "/");
+
+    // Tarayıcının erişebileceği full URL oluştur
+    const url = `https://localhost:7104${relativePath}`;
+
+    setPdfUrl(url);       // iframe'e verilecek olan kaynak bu
+    setShowPopup(true);   // popup aç
+  }}
+>
+  📄 Rapor Al
+</button>
             <div>
               {rental.isActive ? (
                 <><FaCheckCircle className="icon yellow" /> Aktif</>
@@ -181,6 +200,12 @@ function Rentals() {
             setSelectedInstallmentId(null);
           }}
         />
+      )}
+      {reportRentalId && (
+        <ReportPopup rentalId={reportRentalId} onClose={() => setReportRentalId(null)} />
+      )}
+      {showPopup && (
+        <ReportPopup pdfUrl={pdfUrl} onClose={() => setShowPopup(false)} />
       )}
     </div>
     
