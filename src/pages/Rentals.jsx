@@ -190,6 +190,12 @@ function Rentals() {
 
           {expandedId === rental.rentalId && (
             <div className="installments-section">
+              <div className="rental-header">
+                <div><FaPhone className="icon orange" /> Telefon Numarası: {rental.citizenPhoneNumber}</div> 
+                <div><FaUser className="icon pink" /> Kiracı: {rental.citizenFullName}</div> 
+                <div><FaUser className="icon teal" /> Kiralamayı Olusturan Personel: {rental.createdEmployee}</div>
+              </div>
+
               <table className="installments-table">
                 <thead>
                   <tr>
@@ -223,7 +229,14 @@ function Rentals() {
                       <td className="notes-cell">{inst.notes}</td>
                       <td>
                         <button
-                          disabled={inst.isPaid}
+                          disabled={inst.isPaid || !rental.isActive}
+                          title={
+                            !rental.isActive
+                              ? 'Kiralama pasif: ödeme kapalı'
+                              : inst.isPaid
+                              ? 'Taksit zaten ödendi'
+                              : 'Ödeme yap'
+                          }
                           onClick={() => {
                             setSelectedInstallmentId(inst.paymentInstallmentId);
                             setIsPaymentModalOpen(true);
@@ -231,11 +244,11 @@ function Rentals() {
                           style={{
                             padding: '4px 8px',
                             fontSize: '12px',
-                            backgroundColor: inst.isPaid ? '#ccc' : '#28a745',
+                            backgroundColor: (inst.isPaid || !rental.isActive) ? '#ccc' : '#28a745',
                             color: 'white',
                             border: 'none',
                             borderRadius: '4px',
-                            cursor: inst.isPaid ? 'not-allowed' : 'pointer'
+                            cursor: (inst.isPaid || !rental.isActive) ? 'not-allowed' : 'pointer'
                           }}
                         >
                           Ödeme İşlemi

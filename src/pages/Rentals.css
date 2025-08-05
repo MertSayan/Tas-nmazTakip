@@ -48,7 +48,7 @@
 
 .installments-section {
   padding: 16px;
-  max-height: 200px;
+  max-height: 480px;
   overflow-y: auto;
   animation: slideFadeIn 0.3s ease-out forwards;
 }
